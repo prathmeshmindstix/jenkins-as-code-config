@@ -69,7 +69,7 @@ jenkins:
         - name: "execute"
           pattern: ".*"
           permissions:
-          - "Overall/Read"
+          - "Job/Build"
         - assignments:
           - "Prathmesh2598"
           name: "readonly"
@@ -105,10 +105,7 @@ jenkins:
           pattern: "ProjectA.*"
           permissions:
           - "Job/Build"
-          - "Job/Delete"
-          - "Job/Create"
           - "Job/Read"
-          - "Job/Configure"
         - name: "role_project_a_readonly"
           pattern: "ProjectA.*"
           permissions:
@@ -141,10 +138,7 @@ jenkins:
           pattern: "ProjectB.*"
           permissions:
           - "Job/Build"
-          - "Job/Delete"
-          - "Job/Create"
           - "Job/Read"
-          - "Job/Configure"
         - assignments:
           - "Prathmesh2598"
           name: "role_project_b_readonly"
@@ -179,10 +173,7 @@ jenkins:
           pattern: "ProjectC.*"
           permissions:
           - "Job/Build"
-          - "Job/Delete"
-          - "Job/Create"
           - "Job/Read"
-          - "Job/Configure"
         - name: "role_project_c_readonly"
           pattern: "ProjectC.*"
           permissions:
@@ -203,6 +194,7 @@ jobs:
         steps {
             dsl {
                 external('JobDSL/*/folders.jenkins')
+                external('JobDSL/**/*_job.jenkins')
             }
         }
       }
@@ -211,3 +203,17 @@ jobs:
 unclassified:
   location:
     url: http://localhost:8080/
+  globalLibraries:
+      libraries:
+      - defaultVersion: "wip_jenkins_shared_libraries"
+        implicit: true
+        name: "jenkins-libraries"
+        retriever:
+          modernSCM:
+            scm:
+              git:
+                credentialsId: "github_token"
+                id: "eb2f4c14-3c33-4bcf-8b2e-470d0e4a3470"
+                remote: "https://github.com/prathmeshmindstix/jenkins-libraries"
+                traits:
+                - "gitBranchDiscovery"
