@@ -1,0 +1,213 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          id: github_token
+          password: ${GITHUB_TOKEN}
+          scope: GLOBAL
+          username: "github-user"
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+
+jenkins:
+  securityRealm:
+    securityRealm:
+    github:
+      clientID: ${GITHUB_OAUTH_CLIENT_ID}
+      clientSecret: ${GITHUB_OAUTH_CLIENT_SECRET}
+      githubApiUri: "https://api.github.com"
+      githubWebUri: "https://github.com"
+      oauthScopes: "read:org,user:email,repo"
+
+  
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+        - assignments:
+          - "prathmeshmindstix"
+          name: "admin"
+          pattern: ".*"
+          permissions:
+          - "Job/Move"
+          - "Job/Build"
+          - "Lockable Resources/View"
+          - "Credentials/Delete"
+          - "Credentials/ManageDomains"
+          - "Lockable Resources/Unlock"
+          - "View/Create"
+          - "Agent/Configure"
+          - "Job/Read"
+          - "Credentials/Update"
+          - "Agent/Create"
+          - "Job/Delete"
+          - "Agent/Build"
+          - "View/Configure"
+          - "Lockable Resources/Reserve"
+          - "Agent/Provision"
+          - "SCM/Tag"
+          - "Job/Create"
+          - "Job/Discover"
+          - "Credentials/View"
+          - "Agent/Connect"
+          - "Agent/Delete"
+          - "Run/Replay"
+          - "Agent/Disconnect"
+          - "Run/Delete"
+          - "Job/Cancel"
+          - "Overall/Read"
+          - "Run/Update"
+          - "Credentials/Create"
+          - "Overall/Administer"
+          - "View/Delete"
+          - "Job/Configure"
+          - "Job/Workspace"
+          - "View/Read"
+        - name: "execute"
+          pattern: ".*"
+          permissions:
+          - "Overall/Read"
+        - assignments:
+          - "Prathmesh2598"
+          name: "readonly"
+          pattern: ".*"
+          permissions:
+          - "Overall/Read"
+        items:
+        - name: "role_project_a_admin"
+          pattern: "ProjectA.*"
+          permissions:
+          - "Job/Move"
+          - "Lockable Resources/View"
+          - "Job/Build"
+          - "SCM/Tag"
+          - "Credentials/Delete"
+          - "Job/Create"
+          - "Credentials/ManageDomains"
+          - "Lockable Resources/Unlock"
+          - "Job/Discover"
+          - "Job/Read"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Run/Replay"
+          - "Run/Delete"
+          - "Job/Cancel"
+          - "Run/Update"
+          - "Job/Delete"
+          - "Credentials/Create"
+          - "Job/Configure"
+          - "Job/Workspace"
+          - "Lockable Resources/Reserve"
+        - name: "role_project_a_execute"
+          pattern: "ProjectA.*"
+          permissions:
+          - "Job/Build"
+          - "Job/Delete"
+          - "Job/Create"
+          - "Job/Read"
+          - "Job/Configure"
+        - name: "role_project_a_readonly"
+          pattern: "ProjectA.*"
+          permissions:
+          - "Job/Read"
+        - name: "role_project_b_admin"
+          pattern: "ProjectB.*"
+          permissions:
+          - "Job/Move"
+          - "Lockable Resources/View"
+          - "Job/Build"
+          - "SCM/Tag"
+          - "Credentials/Delete"
+          - "Job/Create"
+          - "Credentials/ManageDomains"
+          - "Lockable Resources/Unlock"
+          - "Job/Discover"
+          - "Job/Read"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Run/Replay"
+          - "Run/Delete"
+          - "Job/Cancel"
+          - "Run/Update"
+          - "Job/Delete"
+          - "Credentials/Create"
+          - "Job/Configure"
+          - "Job/Workspace"
+          - "Lockable Resources/Reserve"
+        - name: "role_project_b_execute"
+          pattern: "ProjectB.*"
+          permissions:
+          - "Job/Build"
+          - "Job/Delete"
+          - "Job/Create"
+          - "Job/Read"
+          - "Job/Configure"
+        - assignments:
+          - "Prathmesh2598"
+          name: "role_project_b_readonly"
+          pattern: "ProjectB.*"
+          permissions:
+          - "Job/Read"
+        - name: "role_project_c_admin"
+          pattern: "ProjectC.*"
+          permissions:
+          - "Job/Move"
+          - "Lockable Resources/View"
+          - "Job/Build"
+          - "SCM/Tag"
+          - "Credentials/Delete"
+          - "Job/Create"
+          - "Credentials/ManageDomains"
+          - "Lockable Resources/Unlock"
+          - "Job/Discover"
+          - "Job/Read"
+          - "Credentials/View"
+          - "Credentials/Update"
+          - "Run/Replay"
+          - "Run/Delete"
+          - "Job/Cancel"
+          - "Run/Update"
+          - "Job/Delete"
+          - "Credentials/Create"
+          - "Job/Configure"
+          - "Job/Workspace"
+          - "Lockable Resources/Reserve"
+        - name: "role_project_c_execute"
+          pattern: "ProjectC.*"
+          permissions:
+          - "Job/Build"
+          - "Job/Delete"
+          - "Job/Create"
+          - "Job/Read"
+          - "Job/Configure"
+        - name: "role_project_c_readonly"
+          pattern: "ProjectC.*"
+          permissions:
+          - "Job/Read"
+
+jobs:
+- script: |
+    folder('SeedJobs')
+    freeStyleJob( 'SeedJobs/Main') {
+      scm {
+        git {
+            branch('wip_jenkins_dsl')
+            remote {
+                url('https://github.com/prathmeshmindstix/jenkins-job-dsl.git')
+                credentials('github_token')
+            }
+        }
+        steps {
+            dsl {
+                external('JobDSL/*/folders.jenkins')
+            }
+        }
+      }
+    }
+
+unclassified:
+  location:
+    url: http://localhost:8080/

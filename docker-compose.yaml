@@ -1,0 +1,17 @@
+services:
+  jenkins:
+    container_name: jenkins
+    build: .
+    environment:
+    - GITHUB_TOKEN=${GITHUB_TOKEN}
+    - GITHUB_OAUTH_CLIENT_ID=${GITHUB_OAUTH_CLIENT_ID}
+    - GITHUB_OAUTH_CLIENT_SECRET=${GITHUB_OAUTH_CLIENT_SECRET}
+    ports:
+      - "8080:8080"
+    networks:
+      - jenkins-network
+
+networks:
+  jenkins-network:
+    name: jenkins-network
+    driver: bridge
