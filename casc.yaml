@@ -69,7 +69,9 @@ jenkins:
         - name: "execute"
           pattern: ".*"
           permissions:
+          - "Overall/Read"
           - "Job/Build"
+          - "Job/Read"
         - assignments:
           - "Prathmesh2598"
           name: "readonly"
